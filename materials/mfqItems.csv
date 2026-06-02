@@ -1,0 +1,94 @@
+form,item
+child-long,I felt miserable or unhappy.
+child-long,I didn't enjoy anything at all.
+child-long,I was less hungry than usual.
+child-long,I ate more than usual.
+child-long,I felt so tired I just sat around and did nothing.
+child-long,I was moving and walking more slowly than usual.
+child-long,I was very restless.
+child-long,I felt I was no good anymore.
+child-long,I blamed myself for things that weren't my fault.
+child-long,It was hard for me to make up my mind.
+child-long,I felt grumpy and cross with my parents.
+child-long,I felt like talking less than usual.
+child-long,I was talking more slowly than usual.
+child-long,I cried a lot.
+child-long,I thought there was nothing good for me in the future.
+child-long,I thought that life wasn't worth living.
+child-long,I thought about death or dying.
+child-long,I thought my family would be better off without me.
+child-long,I thought about killing myself.
+child-long,I didn't want to see my friends.
+child-long,I found it hard to think properly or concentrate.
+child-long,I thought bad things would happen to me.
+child-long,I hated myself.
+child-long,I felt I was a bad person.
+child-long,I thought I looked ugly.
+child-long,I worried about aches and pains.
+child-long,I felt lonely.
+child-long,I thought nobody really loved me.
+child-long,I didn't have any fun in school.
+child-long,I thought I could never be as good as other kids.
+child-long,I did everything wrong.
+child-long,I didn't sleep as well as I usually sleep.
+child-long,I slept a lot more than usual.
+parent-long,S/he felt miserable or unhappy.
+parent-long,S/he didn't enjoy anything at all.
+parent-long,S/he was less hungry than usual.
+parent-long,S/he ate more than usual.
+parent-long,S/he felt so tired s/he just sat around and did nothing.
+parent-long,S/he was moving and walking more slowly than usual.
+parent-long,S/he was very restless.
+parent-long,S/he felt s/he was no good anymore.
+parent-long,S/he blamed him/herself for things that weren't his/her fault.
+parent-long,It was hard for him/her to make up his/her mind.
+parent-long,S/he felt grumpy and cross with his/her parents.
+parent-long,S/he felt like talking less than usual.
+parent-long,S/he was talking more slowly than usual.
+parent-long,S/he cried a lot.
+parent-long,S/he thought there was nothing good for him/her in the future.
+parent-long,S/he thought that life wasn't worth living.
+parent-long,S/he thought about death or dying.
+parent-long,S/he thought his/her family would be better off without him/her.
+parent-long,S/he thought about killing him/herself.
+parent-long,S/he didn't want to see his/her friends.
+parent-long,S/he found it hard to think properly or concentrate.
+parent-long,S/he thought bad things would happen to him/her.
+parent-long,S/he hated him/herself.
+parent-long,S/he felt s/he was a bad person.
+parent-long,S/he thought s/he looked ugly.
+parent-long,S/he worried about aches and pains.
+parent-long,S/he felt lonely.
+parent-long,S/he thought nobody really loved him/her.
+parent-long,S/he didn't have any fun at school.
+parent-long,S/he thought s/he could never be as good as other kids.
+parent-long,S/he felt s/he did everything wrong.
+parent-long,S/he didn't sleep as well as s/he usually sleeps.
+parent-long,S/he slept a lot more than usual.
+parent-long,"S/he wasn't as happy as usual, even when s/he was praised or rewarded."
+parent-short,S/he felt miserable or unhappy.
+parent-short,S/he didn't enjoy anything at all.
+parent-short,S/he felt so tired that s/he just sat around and did nothing.
+parent-short,S/he was very restless.
+parent-short,S/he felt s/he was no good anymore.
+parent-short,S/he cried a lot.
+parent-short,S/he found it hard to think properly or concentrate.
+parent-short,S/he hated him/herself.
+parent-short,S/he felt s/he was a bad person.
+parent-short,S/he felt lonely.
+parent-short,S/he thought nobody really loved him/her.
+parent-short,S/he thought s/he could never be as good as other kids.
+parent-short,S/he felt s/he did everything wrong.
+child-short,I felt miserable or unhappy.
+child-short,I didn't enjoy anything at all.
+child-short,I felt so tired I just sat around and did nothing.
+child-short,I was very restless.
+child-short,I felt I was no good anymore.
+child-short,I cried a lot.
+child-short,I found it hard to think properly or concentrate.
+child-short,I hated myself.
+child-short,I was a bad person.
+child-short,I felt lonely.
+child-short,I thought nobody really loved me.
+child-short,I thought I could never be as good as other kids.
+child-short,I did everything wrong.

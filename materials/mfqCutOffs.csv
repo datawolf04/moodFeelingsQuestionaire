@@ -1,0 +1,13 @@
+Assessment,Range,Low,High
+MFQ-Child-Long,Normal,0,27
+MFQ-Child-Long,Elevated,27,30
+MFQ-Child-Long,High,30,66
+MFQ-Parent-Long,Normal,0,27
+MFQ-Parent-Long,Elevated,27,29
+MFQ-Parent-Long,High,29,68
+MFQ-Child-Short,Normal,0,8
+MFQ-Child-Short,Elevated,8,12
+MFQ-Child-Short,High,12,26
+MFQ-Parent-Short,Normal,0,8
+MFQ-Parent-Short,Elevated,8,12
+MFQ-Parent-Short,High,12,26

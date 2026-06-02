@@ -1,0 +1,3 @@
+# Mood and Feelings Questionnaire 
+
+This repository creates a form that allows someone to utilize the [Mood and Feelings Questionnaire](https://psychiatry.duke.edu/research/research-programs-areas/assessment-intervention/developmental-epidemiology-instruments-0), analyze the responses, and have a report of those responses emailed to a selected individual. No personally identifiable information is collected. The user is responsible for ensuring that no protected health information is entered into the form.
