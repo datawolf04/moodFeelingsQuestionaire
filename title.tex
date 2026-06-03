@@ -1,0 +1,13 @@
+\makeatletter
+\renewcommand{\maketitle}{
+  \bgroup
+  \setlength{\parindent}{0pt}
+  \begin{center} % Change this to flushright if you want right-aligned
+    {\sffamily\large\textbf{\@title}} \\
+    \hfill
+    {\large \@date}
+  \end{center}
+  \egroup
+  \vspace{1cm} % Control the spacing below the title block
+}
+\makeatother

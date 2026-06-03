@@ -1,6 +1,7 @@
 library(shiny)
 library(tidyverse)
 library(quarto)
+library(blastula)
 
 items_df <- read.csv("materials/mfqItems.csv", stringsAsFactors = FALSE)
 
@@ -19,8 +20,7 @@ ui <- fluidPage(
 server <- function(input, output, session) {
   rv <- reactiveValues(
     page = "clinician",
-    session_id = 0L,
-    report_path = NULL
+    session_id = 0L
   )
 
   clinician <- reactiveValues(
@@ -102,11 +102,11 @@ server <- function(input, output, session) {
 
   complete_page <- reactive({
     tagList(
-      h3("Report generated"),
-      downloadButton("download", "Download PDF report",
-        class = "btn-primary btn-lg"),
-      br(), br(),
-      actionButton("reset", "Complete another assessment")
+      h3("Report sent"),
+      p("The PDF report has been emailed to", strong(clinician$email), "."),
+      br(),
+      actionButton("reset", "Complete another assessment",
+        class = "btn-primary btn-lg")
     )
   })
 
@@ -159,32 +159,55 @@ server <- function(input, output, session) {
     data_path <- tempfile(fileext = ".csv")
     write.csv(responses, data_path, row.names = FALSE)
 
+    report_path <- tempfile(fileext = ".pdf")
+
     withProgress(
       message = "Rendering PDF report...",
-      value = 0.5,
+      value = 0.3,
       {
         quarto::quarto_render("mfqReport.qmd", execute_params = list(
           instrument = instr,
           codeword = clinician$codeword,
           data_path = data_path
-        ), quiet = TRUE)
-        incProgress(1, detail = "Done")
+        ), output_file = basename(report_path),
+           output_dir = dirname(report_path), quiet = TRUE)
+        incProgress(0.6, detail = "Sending email...")
       }
     )
 
-    rv$report_path <- "mfqReport.pdf"
-    rv$page <- "complete"
+    tryCatch({
+      email <- compose_email(
+        body = md(paste0(
+          "Please find attached the Mood and Feelings Questionnaire report for ",
+          "the assessment completed under the codeword **",
+          clinician$codeword, "**.",
+          "<br><br>",
+          "Assessment: **", instr, "**<br>",
+          "Items: **", length(items), "**<br><br>"
+        )),
+        attachments = report_path
+      )
+      smtp_send(
+        email,
+        from = Sys.getenv("SMTP_FROM"),
+        to = clinician$email,
+        subject = paste("MFQ Report -", clinician$codeword),
+        credentials = creds_envvar(
+          host = Sys.getenv("SMTP_HOST"),
+          port = Sys.getenv("SMTP_PORT"),
+          user = Sys.getenv("SMTP_USER"),
+          pass_envvar = "SMTP_PASSWORD"
+        )
+      )
+      incProgress(1, detail = "Sent")
+      rv$page <- "complete"
+    }, error = function(e) {
+      showNotification(
+        paste("Failed to send email:", e$message),
+        type = "error", duration = 15
+      )
+    })
   })
-
-  output$download <- downloadHandler(
-    filename = function() {
-      cw <- gsub("[^A-Za-z0-9]", "_", clinician$codeword)
-      paste0("MFQ_", cw, "_", Sys.Date(), ".pdf")
-    },
-    content = function(file) {
-      file.copy(rv$report_path, file)
-    }
-  )
 
   observeEvent(input$reset, {
     rv$page <- "clinician"

@@ -2,6 +2,14 @@
 
 This repository creates a form that allows someone to utilize the [Mood and Feelings Questionnaire](https://psychiatry.duke.edu/research/research-programs-areas/assessment-intervention/developmental-epidemiology-instruments-0), analyze the responses, and have a report of those responses emailed to a selected individual. No personally identifiable information is collected. The user is responsible for ensuring that no protected health information is entered into the form.
 
+## Usage
+
+This is intended for usage on a single device by the questionnaire administrator (admin) and the person taking the questionnaire (subject). The admin fills out the first page with an email address for the results to be sent to, a code phrase to identify the subject, and selects the appropriate instrument. Upon completing that, the admin gives the device to the subject who then fills out their responses. Once complete, the responses are analyzed and a report is emailed to the admin to use as they see fit.
+
+## Limitations
+
+The author of this repository is not a mental health professional, nor does he have any specific training in mental health diagnoses. Any concerns about mental health conditions should be discussed with a mental healthcare professional.
+
 ## References
 
 - Angold, A., Costello, E. J., Messer, S. C., Pickles, A., Winder, F., & Silver, D. (1995). [Development of a short questionnaire for use in epidemiological studies of depression in children and adolescents](https://psychiatry.duke.edu/sites/default/files/2023-02/Angold%20MFQ%20Article_Reduced%20File%20Size.pdf). *International Journal of Methods in Psychiatric Research*, 5, 237–249.

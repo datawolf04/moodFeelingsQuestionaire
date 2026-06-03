@@ -2,7 +2,10 @@
 title: "Mood and Feelings Questionnaire Report"
 date: today
 date-format: "MMMM D, YYYY"
-format: pdf
+format: 
+  pdf:
+    include-in-header: title.tex
+    geometry: margin=0.75in
 execute: 
   echo: false
   message: false
@@ -21,10 +24,10 @@ resp <- read.csv(params$data_path)
 
 ## Assessment: `r params$instrument`
 
-**Total score:** `r sum(resp$Score, na.rm = TRUE)`
+### **Total score:** `r sum(resp$Score, na.rm = TRUE)`
 
 ```{r}
-#| fig-height: 2
+#| fig-height: 3
 
 source('materials/mfqProperties.R')
 scorePlot(sum(resp$Score, na.rm = TRUE), gsub("\\s*\\(.*\\)$", "", params$instrument))

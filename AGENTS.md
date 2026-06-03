@@ -5,8 +5,8 @@ RShiny webform for the Mood and Feelings Questionnaire. No formal R package stru
 ## Current state
 
 - **`app.R`** exists at the root — single-file RShiny webform (no `server.R`/`ui.R`/`global.R` split).
-- The app has two pages: **clinician page** (email, codeword, instrument selection) and **questionnaire page** (Likert items from the selected form).
-- PDF reports are generated via **Quarto** (the `quarto` CLI must be installed). The `.qmd` template is built inline in `app.R` — no separate template file.
+- The app has three pages: **clinician page** (email, codeword, instrument selection), **questionnaire page** (Likert items from the selected form), and **complete page** (confirmation that the report was emailed).
+- PDF reports are generated via **Quarto** (the `quarto` CLI must be installed). The `.qmd` template is `mfqReport.qmd` at the root, rendered via `quarto::quarto_render()` with `execute_params`.
 - **Scoring and reference data** live in `materials/`:
   - `mfqProperties.R` — scoring logic and distribution-plot function (`scorePlot`). Uses `tidyverse`.
   - `mfqItems.csv` — items keyed by `form` (child-long, child-short, parent-long, parent-short).
@@ -21,7 +21,29 @@ RShiny webform for the Mood and Feelings Questionnaire. No formal R package stru
 shiny::runApp()
 ```
 
-Requires packages: `shiny`, `tidyverse`, `quarto`. Requires the **Quarto CLI** (install from https://quarto.org).
+Requires packages: `shiny`, `tidyverse`, `quarto`, `blastula`. Requires the **Quarto CLI** (install from https://quarto.org).
+
+### Email setup (SMTP)
+
+The app emails the PDF report via SMTP using `blastula`. Set these environment variables (e.g. in `.Renviron`):
+
+| Variable | Description |
+|---|---|
+| `SMTP_HOST` | SMTP server hostname |
+| `SMTP_PORT` | SMTP port (e.g. 587 for TLS, 465 for SSL) |
+| `SMTP_USER` | SMTP username |
+| `SMTP_PASSWORD` | SMTP password (referenced by `blastula::creds_envvar`) |
+| `SMTP_FROM` | From-address for the email |
+
+Example for Gmail:
+
+```
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=you@gmail.com
+SMTP_PASSWORD=your-app-password
+SMTP_FROM=you@gmail.com
+```
 
 ## Architecture notes
 
