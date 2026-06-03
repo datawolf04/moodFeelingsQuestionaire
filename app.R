@@ -43,7 +43,7 @@ server <- function(input, output, session) {
       textInput("email", "Recipient email address",
         placeholder = "clinician@example.com"),
       textInput("codeword", "Codeword / Identifier",
-        placeholder = "e.g. patient ID or initials"),
+        placeholder = "e.g., Date and time of appointment"),
       selectInput("instrument", "Assessment instrument",
         choices = names(instruments)),
       actionButton("start", "Start assessment",
@@ -95,7 +95,7 @@ server <- function(input, output, session) {
         )
       ),
       hr(),
-      actionButton("submit", "Submit and generate PDF report",
+      actionButton("submit", "Submit",
         class = "btn-success btn-lg")
     )
   })
@@ -111,6 +111,11 @@ server <- function(input, output, session) {
   })
 
   observeEvent(input$start, {
+    if (is.null(input$email) || nchar(trimws(input$email)) == 0) {
+      showNotification("Please enter a recipient email address.",
+        type = "error")
+      return()
+    }
     clinician$email <- input$email
     clinician$codeword <- input$codeword
     clinician$instrument <- input$instrument
@@ -123,6 +128,17 @@ server <- function(input, output, session) {
     instr <- clinician$instrument
     form <- instruments[[instr]]
     items <- items_df$item[items_df$form == form]
+
+    n_answered <- sum(!map_lgl(seq_along(items), ~ is.null(input[[paste0("q", sid, "_", .x)]])))
+    n_total <- length(items)
+    if (n_answered < n_total) {
+      showNotification(
+        paste0("Please answer all ", n_total, " items (", n_answered,
+               " answered so far)."),
+        type = "error", duration = 10
+      )
+      return()
+    }
 
     responses <- map_dfr(seq_along(items), function(i) {
       val <- input[[paste0("q", sid, "_", i)]]

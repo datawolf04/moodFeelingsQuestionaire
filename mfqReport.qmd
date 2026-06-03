@@ -1,9 +1,12 @@
 ---
 title: "Mood and Feelings Questionnaire Report"
+date: today
+date-format: "MMMM D, YYYY"
 format: pdf
 execute: 
   echo: false
-  messages: false
+  message: false
+  warning: false
 params:
   instrument: ""
   codeword: ""
@@ -18,11 +21,11 @@ resp <- read.csv(params$data_path)
 
 ## Assessment: `r params$instrument`
 
-**Codeword:** `r params$codeword`
-
 **Total score:** `r sum(resp$Score, na.rm = TRUE)`
 
 ```{r}
+#| fig-height: 2
+
 source('materials/mfqProperties.R')
 scorePlot(sum(resp$Score, na.rm = TRUE), gsub("\\s*\\(.*\\)$", "", params$instrument))
 ```
