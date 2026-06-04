@@ -162,7 +162,7 @@ server <- function(input, output, session) {
     report_path <- tempfile(fileext = ".pdf")
 
     withProgress(
-      message = "Rendering PDF report...",
+      message = "Preparing report...",
       value = 0.3,
       {
         quarto::quarto_render("mfqReport.qmd", execute_params = list(
@@ -170,7 +170,7 @@ server <- function(input, output, session) {
           codeword = clinician$codeword,
           data_path = data_path
         ), output_file = basename(report_path),
-           output_dir = dirname(report_path), quiet = TRUE)
+           quarto_args = c("--output-dir", dirname(report_path)), quiet = TRUE)
         incProgress(0.6, detail = "Sending email...")
       }
     )
@@ -184,9 +184,8 @@ server <- function(input, output, session) {
           "<br><br>",
           "Assessment: **", instr, "**<br>",
           "Items: **", length(items), "**<br><br>"
-        )),
-        attachments = report_path
-      )
+        ))
+      ) |> add_attachment(report_path)
       smtp_send(
         email,
         from = Sys.getenv("SMTP_FROM"),

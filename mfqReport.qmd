@@ -1,5 +1,5 @@
 ---
-title: "Mood and Feelings Questionnaire Report"
+title: "`r params$instrument`"
 date: today
 date-format: "MMMM D, YYYY"
 format: 
@@ -22,8 +22,6 @@ library(gt)
 resp <- read.csv(params$data_path)
 ```
 
-## Assessment: `r params$instrument`
-
 ### **Total score:** `r sum(resp$Score, na.rm = TRUE)`
 
 ```{r}
@@ -36,6 +34,8 @@ scorePlot(sum(resp$Score, na.rm = TRUE), gsub("\\s*\\(.*\\)$", "", params$instru
 ### Item responses
 
 ```{r}
+#| hold_position: TRUE
+
 resp |>
   mutate(Response = factor(Response,
     levels = c("0", "1", "2"),
