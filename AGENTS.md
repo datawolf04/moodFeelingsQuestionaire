@@ -1,59 +1,58 @@
 # MFQ — Mood and Feelings Questionnaire
 
-RShiny webform for the Mood and Feelings Questionnaire. No formal R package structure (no `DESCRIPTION`, no `renv`).
+Single-file RShiny webform (`app.R`). Three pages: clinician (email, codeword, instrument), questionnaire (Likert items), complete (confirmation). PDF report rendered via **Quarto CLI** + `mfqReport.qmd`.
 
-## Current state
-
-- **`app.R`** exists at the root — single-file RShiny webform (no `server.R`/`ui.R`/`global.R` split).
-- The app has three pages: **clinician page** (email, codeword, instrument selection), **questionnaire page** (Likert items from the selected form), and **complete page** (confirmation that the report was emailed).
-- PDF reports are generated via **Quarto** (the `quarto` CLI must be installed). The `.qmd` template is `mfqReport.qmd` at the root, rendered via `quarto::quarto_render()` with `execute_params`.
-- **Scoring and reference data** live in `materials/`:
-  - `mfqProperties.R` — scoring logic and distribution-plot function (`scorePlot`). Uses `tidyverse`.
-  - `mfqItems.csv` — items keyed by `form` (child-long, child-short, parent-long, parent-short).
-  - `mfqCutOffs.csv` — cut-point ranges (Normal / Elevated / High) per assessment form.
-  - `scores.csv` — normative means and SDs per form and population group (Pediatric / Psychiatric).
-  - PDFs — reference instruments and validation papers.
-- `materials/AGENTS.md` documents the PDF collection only.
-
-## Running the app
+## Run & requirements
 
 ```r
 shiny::runApp()
 ```
 
-Requires packages: `shiny`, `tidyverse`, `quarto`, `blastula`. Requires the **Quarto CLI** (install from https://quarto.org).
+Packages: `shiny`, `tidyverse`, `quarto`, `blastula`, `gt`. Quarto CLI must be installed (https://quarto.org).
 
-### Email setup (SMTP)
+## Security
 
-The app emails the PDF report via SMTP using `blastula`. Set these environment variables (e.g. in `.Renviron`):
+- **`.Renviron` IS tracked by git** — it contains real SMTP credentials committed to the repo. The `.mygitignore` file lists `.Renviron` but is not honored because it's not named `.gitignore`. Do NOT commit changes to `.Renviron`. Consider migrating to environment-managed secrets like GitHub Secrets.
+- `#.Renviron#` (Vim backup) exists untracked — add to `.gitignore`.
+- No PII collected by the app; email is for routing only, not stored.
 
-| Variable | Description |
+## SMTP (blastula)
+
+Set in `.Renviron`:
+
+| Variable | Purpose |
 |---|---|
 | `SMTP_HOST` | SMTP server hostname |
-| `SMTP_PORT` | SMTP port (e.g. 587 for TLS, 465 for SSL) |
+| `SMTP_PORT` | SMTP port (587 for TLS) |
 | `SMTP_USER` | SMTP username |
-| `SMTP_PASSWORD` | SMTP password (referenced by `blastula::creds_envvar`) |
-| `SMTP_FROM` | From-address for the email |
+| `SMTP_PASSWORD` | SMTP password env var name |
+| `SMTP_FROM` | From-address |
 
-Example for Gmail:
+## Data flow
 
 ```
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=you@gmail.com
-SMTP_PASSWORD=your-app-password
-SMTP_FROM=you@gmail.com
+app.R  ──reads──►  materials/mfqItems.csv     (items by form)
+                    materials/mfqCutOffs.csv   (reference only — NOT loaded by code)
+                    materials/scores.csv       (reference only — NOT loaded by code)
+
+app.R  ──render──►  mfqReport.qmd  ──source──►  materials/mfqProperties.R
+                                                └── scorePlot() — hardcodes normative data inline
 ```
+
+**Quirk:** `mfqProperties.R` builds `scores` and `cutoffs` data.frames inline, not from the CSVs. If you update the CSVs, the changes have **no effect** unless you also update the R code.
 
 ## Architecture notes
 
-- Four assessment forms: MFQ-Child-Long (33 items), MFQ-Child-Short (13 items), MFQ-Parent-Long (33 items), MFQ-Parent-Short (13 items).
-- No PII collected. Email address is collected for recipient routing but not stored.
-- Data sources are CSVs in `materials/` — not a database.
-- No tests, no CI, no linting/formatting config.
+- **Single-file app** — no `server.R`/`ui.R`/`global.R` split.
+- **Four forms:** MFQ-Child-Long (33 items), MFQ-Child-Short (13), MFQ-Parent-Long (33), MFQ-Parent-Short (13). Items stored in `materials/mfqItems.csv` keyed by `form`.
+- **Radio buttons** are raw HTML (`<input type="radio">`) with `shiny-input-radiogroup` class on `<tr>`, not `radioButtons()`. Input names use the pattern `q{sid}_{i}` where `sid` is a session counter incremented per assessment — prevents stale values when re-running assessments without page refresh.
+- **Scoring:** Not True=0, Sometimes=1, True=2. Total = sum. Cut-point ranges per form in `mfqProperties.R`.
+- **`scorePlot()` special case:** MFQ-Parent-Short has only 2 cut-point ranges (Normal, High) instead of 3 — no "Elevated" tier, different color mapping.
+- **QMD report** calls `source('materials/mfqProperties.R')` — relative to project root at render time. Uses `gt` for the item-response table; `title.tex` customizes PDF title and forces table float to `[H]`.
+- **`/materials/`** — CSVs, `mfqProperties.R` (scoring + plot), and committed reference PDFs. `materials/AGENTS.md` documents the PDF collection.
 
 ## Conventions
 
-- Use `tidyverse` (dplyr, ggplot2, purrr, etc.) — established in `mfqProperties.R`.
-- Keep scoring/distribution logic consistent with `scorePlot()` in `mfqProperties.R`.
-- Radio button inputs use `session_id` prefix (`q{sid}_{i}`) to avoid stale values when re-running assessments.
+- Use `tidyverse` throughout.
+- Radio-button input names: `q{sid}_{i}` pattern.
+- No tests, no CI, no linting/formatting config.

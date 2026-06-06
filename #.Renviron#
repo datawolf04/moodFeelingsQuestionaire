@@ -1,5 +1,0 @@
-SMTP_HOST=in-v3.mailjet.com
-SMTP_PORT=587
-SMTP_USER=cee0a04b964b6e25d50ba1436b08ad0c
-SMTP_PASSWORD=28ce9f546c7fb9c7f14ba2712f6c1e4a
-SMTP_FROM=stevenwolf1687@gmail.com
