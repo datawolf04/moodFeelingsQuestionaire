@@ -1,0 +1,19 @@
+name: Deploy
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH deploy
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: 46.224.144.94
+          username: root
+          key: ${{ secrets.DEPLOY_KEY }}
+          script: |
+            cd /srv/shiny-server/mfq
+            git fetch origin main
+            git reset --hard origin/main
+            systemctl restart shiny-server
