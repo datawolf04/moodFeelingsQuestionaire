@@ -13,7 +13,11 @@ instruments <- c(
 )
 
 ui <- fluidPage(
-  titlePanel("Mood and Feelings Questionnaire"),
+  titlePanel(
+    tags$a(href = "https://psychiatry.duke.edu/research/research-programs-areas/assessment-intervention/developmental-epidemiology-instruments-0",
+      "Mood and Feelings Questionnaire",
+      style = "color: inherit; text-decoration: inherit;")
+  ),
   uiOutput("page")
 )
 
@@ -47,7 +51,23 @@ server <- function(input, output, session) {
       selectInput("instrument", "Assessment instrument",
         choices = names(instruments)),
       actionButton("start", "Start assessment",
-        class = "btn-primary btn-lg")
+        class = "btn-primary btn-lg"),
+      hr(),
+      tags$small(
+        class = "text-muted",
+        tags$p(
+          "The ",
+          tags$a(href = "https://psychiatry.duke.edu/research/research-programs-areas/assessment-intervention/developmental-epidemiology-instruments-0",
+            "Mood and Feelings Questionnaire"),
+          " is a research validated instrument developed by Adrian Angold and Elizabeth J. Costello in 1987. The authors allow for the questionnaire to be administered by mental health providers and researchers in the mental health field. The authors of this page do not derive any financial gain from this work."
+        ),
+        tags$p(
+          "This page is intended as a digital replacement for a printed PDF page. This is intended for usage on a single device by the questionnaire administrator (admin) and the person taking the questionnaire (subject). The admin fills out the first page with an email address for the results to be sent to, a code phrase to identify the subject, and selects the appropriate instrument. Upon completing that, the admin gives the device to the subject who then fills out their responses. Once complete, the responses are analyzed and a report is emailed to the admin to use as they see fit. All data collected by the form is ephemeral, that is, responses are not saved on the server hosting this page. Answers are submitted, used to generate a report, and then emailed to the admin. The report is not stored on the server. The only location that the data collected exists is in the report that has been emailed."
+        ),
+        tags$p(
+          "Any concerns about mental health conditions should be discussed with a mental healthcare professional. This form and the report derived by it are not a substitute for a diagnosis by a qualified mental healthcare professional. In the event of a mental health crisis, contact 988, the National Suicide Hotline."
+        )
+      )
     )
   })
 
